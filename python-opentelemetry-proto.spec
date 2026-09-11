@@ -16,6 +16,13 @@ Source:         %{pypi_source opentelemetry_proto}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+# The package ships generated gRPC service stubs (the *_pb2_grpc modules) that
+# import grpc at module load. grpc is optional at runtime (opentelemetry-proto
+# declares only protobuf; consumers get grpcio via the proto-grpc exporter), so
+# the automatic dependency generator does not add it to Requires. It is pulled in
+# here only so the import check exercises those stub modules instead of skipping
+# them.
+BuildRequires:  python3dist(grpcio)
 
 
 # Fill in the actual package description to submit package to Fedora
